@@ -1,0 +1,64 @@
+Model: SVM
+Accuracy: 0.9480
+
+Classification Report:
+  Class 0:
+    precision: 0.9789
+    recall: 0.9894
+    f1-score: 0.9841
+    support: 94.0000
+  Class 1:
+    precision: 0.9911
+    recall: 0.9823
+    f1-score: 0.9867
+    support: 113.0000
+  Class 2:
+    precision: 0.9286
+    recall: 0.9455
+    f1-score: 0.9369
+    support: 110.0000
+  Class 3:
+    precision: 0.9391
+    recall: 0.9231
+    f1-score: 0.9310
+    support: 117.0000
+  Class 4:
+    precision: 0.9512
+    recall: 0.9176
+    f1-score: 0.9341
+    support: 85.0000
+  Class 5:
+    precision: 0.9340
+    recall: 0.9612
+    f1-score: 0.9474
+    support: 103.0000
+  Class 6:
+    precision: 0.9677
+    recall: 0.9783
+    f1-score: 0.9730
+    support: 92.0000
+  Class 7:
+    precision: 0.9583
+    recall: 0.9485
+    f1-score: 0.9534
+    support: 97.0000
+  Class 8:
+    precision: 0.9208
+    recall: 0.9029
+    f1-score: 0.9118
+    support: 103.0000
+  Class 9:
+    precision: 0.9091
+    recall: 0.9302
+    f1-score: 0.9195
+    support: 86.0000
+  Class macro avg:
+    precision: 0.9479
+    recall: 0.9479
+    f1-score: 0.9478
+    support: 1000.0000
+  Class weighted avg:
+    precision: 0.9481
+    recall: 0.9480
+    f1-score: 0.9480
+    support: 1000.0000

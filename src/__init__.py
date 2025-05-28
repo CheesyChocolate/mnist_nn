@@ -1,3 +1,5 @@
-# SPDX-FileCopyrightText: 2025-present CheesyChocolate <dev@behnamlal.xyz>
+# SPDX-FileCopyrightText: 2023-present
 #
 # SPDX-License-Identifier: MIT
+
+"""MNIST pattern recognition package."""

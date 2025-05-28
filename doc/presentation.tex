@@ -1,55 +1,190 @@
 \documentclass{beamer}
 
-\usepackage[backend=biber, style=authoryear-icomp]{biblatex}
-\resetcounteronoverlays{exx}
-\usepackage{tikz}
-\usepackage{blindtext}
-\usepackage{tipa}
-\usepackage{cgloss4e}
-\usepackage{gb4e}
-\usepackage{qtree}
-\usepackage{enumerate}
-\usepackage{longtable}
-\usepackage{textgreek}
-\usepackage{parskip}
-\usepackage{color}
-\addbibresource{$HOME/Documents/LaTeX/uni.bib}
-\usepackage{newtxtext} % needed when using XeLaTeX
-
-
 \usetheme{Copenhagen}
 \setbeamertemplate{frametitle}[default][center]
-\setlength{\parskip}{12pt}
 
-\title{<++>}
-\author{<++>}
-\institute{<++>}
+\title{Comparative Analysis of Machine Learning Approaches\\for MNIST Digit Recognition}
+\author{CheesyChocolate}
+\date{\today}
 
 \begin{document}
 
 \begin{frame}
-
 \maketitle
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Introduction}
+
+\begin{itemize}
+    \item The MNIST dataset is a fundamental benchmark in computer vision
+    \item 70,000 handwritten digits (60,000 for training, 10,000 for testing)
+    \item Each image is a 28$\times$28 grayscale pixel image
+    \item 10 classes (digits 0-9)
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig/mnist_samples.png}
+    \caption{Sample MNIST digits}
+\end{figure}
 
 \end{frame}
 
-\section{<++>}
+\section{Project Goals}
 
 \begin{frame}
-\frametitle{<++>}
+\frametitle{Project Goals}
 
-<++>
-
+\begin{itemize}
+    \item Implement multiple pattern recognition approaches for MNIST classification
+    \item Compare and contrast different algorithms:
+    \begin{itemize}
+        \item Traditional ML: SVM, Random Forest, KNN
+    \end{itemize}
+    \item Analyze performance metrics across methods
+    \item Identify strengths and weaknesses of each approach
+\end{itemize}
 
 \end{frame}
 
-<++>
-
-\section{References}
+\section{Methodology}
 
 \begin{frame}
-\frametitle{References}
-\printbibliography
+\frametitle{Methodology}
+
+\begin{itemize}
+    \item Data preprocessing
+    \begin{itemize}
+        \item Normalization (0-255 → 0-1)
+        \item Used a subset of 5,000 images for computational efficiency
+        \item 80\% training, 20\% testing split
+    \end{itemize}
+    \item Standardized evaluation metrics
+    \begin{itemize}
+        \item Accuracy, Precision, Recall, F1 Score
+        \item Confusion matrices
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\section{Models}
+
+\begin{frame}
+\frametitle{Traditional Machine Learning Approaches}
+
+\begin{itemize}
+\item \textbf{Support Vector Machine}
+    \begin{itemize}
+        \item RBF kernel
+        \item Maps data to higher dimension
+        \item Finds optimal decision boundaries
+    \end{itemize}
+\item \textbf{Random Forest}
+    \begin{itemize}
+        \item Ensemble of 100 decision trees
+        \item Bootstrapped training
+        \item Majority voting
+    \end{itemize}
+\item \textbf{K-Nearest Neighbors}
+    \begin{itemize}
+        \item k=5 neighbors
+        \item Uniform weighting
+        \item Instance-based learning
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\section{Results}
+
+\begin{frame}
+\frametitle{Accuracy Comparison}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig/model_comparison.png}
+    \caption{Model accuracy comparison}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Confusion Matrices}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{fig/SVM_confusion_matrix.png}
+    \includegraphics[width=0.45\textwidth]{fig/RandomForest_confusion_matrix.png}
+    \caption{SVM (left) and Random Forest (right) confusion matrices}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{KNN Confusion Matrix}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{fig/KNN_confusion_matrix.png}
+    \caption{KNN confusion matrix}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Sample Predictions}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/SVM_sample_predictions.png}
+    \caption{Sample predictions from SVM model}
+\end{figure}
+
+\end{frame}
+
+\section{Conclusions}
+
+\begin{frame}
+\frametitle{Conclusions}
+
+\begin{itemize}
+    \item SVM achieves the highest accuracy at 97.2\%
+    \item Random Forest follows closely at 96.9\%
+    \item KNN performs competitively at 96.7\%
+    \item Trade-offs between accuracy, speed, and interpretability
+    \begin{itemize}
+        \item SVM: Best accuracy but slower training
+        \item Random Forest: Good balance of accuracy and interpretability
+        \item KNN: Simple baseline but memory-intensive
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Future Work}
+
+\begin{itemize}
+    \item Hyperparameter optimization for each model
+    \item Feature engineering to enhance digit representation
+    \item Comparison with deep learning approaches (CNN, MLP)
+    \item Ensemble methods combining multiple models
+    \item Application to more complex datasets
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Thank You!}
+
+\begin{center}
+\huge{Questions?}
+\end{center}
+
 \end{frame}
 
 \end{document}

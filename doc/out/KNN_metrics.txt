@@ -1,0 +1,64 @@
+Model: KNN
+Accuracy: 0.9280
+
+Classification Report:
+  Class 0:
+    precision: 0.9684
+    recall: 0.9787
+    f1-score: 0.9735
+    support: 94.0000
+  Class 1:
+    precision: 0.9339
+    recall: 1.0000
+    f1-score: 0.9658
+    support: 113.0000
+  Class 2:
+    precision: 0.9800
+    recall: 0.8909
+    f1-score: 0.9333
+    support: 110.0000
+  Class 3:
+    precision: 0.8720
+    recall: 0.9316
+    f1-score: 0.9008
+    support: 117.0000
+  Class 4:
+    precision: 0.9186
+    recall: 0.9294
+    f1-score: 0.9240
+    support: 85.0000
+  Class 5:
+    precision: 0.9223
+    recall: 0.9223
+    f1-score: 0.9223
+    support: 103.0000
+  Class 6:
+    precision: 0.9278
+    recall: 0.9783
+    f1-score: 0.9524
+    support: 92.0000
+  Class 7:
+    precision: 0.8879
+    recall: 0.9794
+    f1-score: 0.9314
+    support: 97.0000
+  Class 8:
+    precision: 0.9878
+    recall: 0.7864
+    f1-score: 0.8757
+    support: 103.0000
+  Class 9:
+    precision: 0.9048
+    recall: 0.8837
+    f1-score: 0.8941
+    support: 86.0000
+  Class macro avg:
+    precision: 0.9303
+    recall: 0.9281
+    f1-score: 0.9273
+    support: 1000.0000
+  Class weighted avg:
+    precision: 0.9305
+    recall: 0.9280
+    f1-score: 0.9273
+    support: 1000.0000

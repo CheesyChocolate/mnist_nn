@@ -1,0 +1,6 @@
+Model Accuracy Comparison
+========================
+
+SVM: 0.9480
+RandomForest: 0.9270
+KNN: 0.9280

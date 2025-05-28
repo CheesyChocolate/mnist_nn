@@ -1,0 +1,64 @@
+Model: RandomForest
+Accuracy: 0.9270
+
+Classification Report:
+  Class 0:
+    precision: 0.9789
+    recall: 0.9894
+    f1-score: 0.9841
+    support: 94.0000
+  Class 1:
+    precision: 1.0000
+    recall: 0.9735
+    f1-score: 0.9865
+    support: 113.0000
+  Class 2:
+    precision: 0.9182
+    recall: 0.9182
+    f1-score: 0.9182
+    support: 110.0000
+  Class 3:
+    precision: 0.8889
+    recall: 0.8889
+    f1-score: 0.8889
+    support: 117.0000
+  Class 4:
+    precision: 0.9070
+    recall: 0.9176
+    f1-score: 0.9123
+    support: 85.0000
+  Class 5:
+    precision: 0.9223
+    recall: 0.9223
+    f1-score: 0.9223
+    support: 103.0000
+  Class 6:
+    precision: 0.9362
+    recall: 0.9565
+    f1-score: 0.9462
+    support: 92.0000
+  Class 7:
+    precision: 0.9271
+    recall: 0.9175
+    f1-score: 0.9223
+    support: 97.0000
+  Class 8:
+    precision: 0.8942
+    recall: 0.9029
+    f1-score: 0.8986
+    support: 103.0000
+  Class 9:
+    precision: 0.8941
+    recall: 0.8837
+    f1-score: 0.8889
+    support: 86.0000
+  Class macro avg:
+    precision: 0.9267
+    recall: 0.9271
+    f1-score: 0.9268
+    support: 1000.0000
+  Class weighted avg:
+    precision: 0.9272
+    recall: 0.9270
+    f1-score: 0.9270
+    support: 1000.0000
