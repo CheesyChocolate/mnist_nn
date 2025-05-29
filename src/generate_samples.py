@@ -11,6 +11,14 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+import torch
+import tensorflow as tf
+from tensorflow.keras.utils import to_categorical
+
+# Import transformer model
+from src.modules.models.transformer_model import MNISTTransformerModel
+from src.modules.models.cnn_model import CNNModel
+from src.modules.models.mlp_model import MLPModel
 
 # Ensure output directories exist
 os.makedirs('doc/fig', exist_ok=True)
@@ -123,23 +131,117 @@ def evaluate_model(model, X_test, y_test, model_name):
 def train_svm(X_train, y_train, X_test, y_test):
     """Train and evaluate an SVM model."""
     print("Training SVM model...")
-    model = SVC(kernel='rbf', gamma='scale', C=1.0, random_state=RANDOM_STATE)
+    model = SVC(kernel='rbf', gamma='scale', C=10.0, random_state=RANDOM_STATE)
     model.fit(X_train, y_train)
     return evaluate_model(model, X_test, y_test, "SVM")
 
 def train_random_forest(X_train, y_train, X_test, y_test):
     """Train and evaluate a Random Forest model."""
     print("Training Random Forest model...")
-    model = RandomForestClassifier(n_estimators=100, random_state=RANDOM_STATE, n_jobs=-1)
+    model = RandomForestClassifier(n_estimators=200, random_state=RANDOM_STATE, n_jobs=-1)
     model.fit(X_train, y_train)
     return evaluate_model(model, X_test, y_test, "RandomForest")
 
 def train_knn(X_train, y_train, X_test, y_test):
     """Train and evaluate a KNN model."""
     print("Training KNN model...")
-    model = KNeighborsClassifier(n_neighbors=5, n_jobs=-1)
+    model = KNeighborsClassifier(n_neighbors=3, n_jobs=-1)
     model.fit(X_train, y_train)
     return evaluate_model(model, X_test, y_test, "KNN")
+
+def train_transformer(X_train, y_train, X_test, y_test):
+    """Train and evaluate a Vision Transformer model."""
+    print("Training Vision Transformer model...")
+    
+    # Use a more CPU-friendly configuration with 5 epochs for better results
+    model = MNISTTransformerModel(
+        img_size=28,
+        patch_size=7,
+        embed_dim=64,
+        num_heads=4,
+        num_layers=4,
+        batch_size=32,
+        num_epochs=5,  # Increased from 3 to 5 for better accuracy
+        learning_rate=0.001,
+        device=torch.device("cpu")  # Explicitly use CPU
+    )
+    
+    model.fit(X_train, y_train)
+    return evaluate_model(model, X_test, y_test, "Transformer")
+
+def train_cnn(X_train, y_train, X_test, y_test):
+    """Train and evaluate a CNN model."""
+    print("Training CNN model...")
+    
+    # Reshape data for CNN input (NHWC format)
+    X_train_reshaped = X_train.reshape(-1, 28, 28, 1)
+    X_test_reshaped = X_test.reshape(-1, 28, 28, 1)
+    
+    # Convert labels to one-hot encoding
+    y_train_cat = to_categorical(y_train, 10)
+    y_test_cat = to_categorical(y_test, 10)
+    
+    # Initialize and build the model
+    model = CNNModel(input_shape=(28, 28, 1), num_classes=10)
+    model.build_model()
+    
+    # Train the model
+    history = model.train(
+        X_train_reshaped, y_train_cat,
+        x_val=X_test_reshaped, y_val=y_test_cat,
+        batch_size=128,
+        epochs=5
+    )
+    
+    # Evaluate
+    y_pred_prob = model.model.predict(X_test_reshaped)
+    y_pred = np.argmax(y_pred_prob, axis=1)
+    
+    # Create scikit-learn compatible predictor
+    class CNNPredictor:
+        def predict(self, X):
+            X_reshaped = X.reshape(-1, 28, 28, 1)
+            y_pred_prob = model.model.predict(X_reshaped)
+            return np.argmax(y_pred_prob, axis=1)
+    
+    return evaluate_model(CNNPredictor(), X_test, y_test, "CNN")
+
+def train_mlp(X_train, y_train, X_test, y_test):
+    """Train and evaluate an MLP model."""
+    print("Training MLP model...")
+    
+    # Reshape data for MLP input
+    X_train_reshaped = X_train.reshape(-1, 28, 28, 1)
+    X_test_reshaped = X_test.reshape(-1, 28, 28, 1)
+    
+    # Convert labels to one-hot encoding
+    y_train_cat = to_categorical(y_train, 10)
+    y_test_cat = to_categorical(y_test, 10)
+    
+    # Initialize and build the model
+    model = MLPModel(input_shape=(28, 28, 1), num_classes=10)
+    model.build_model()
+    
+    # Train the model
+    history = model.train(
+        X_train_reshaped, y_train_cat,
+        x_val=X_test_reshaped, y_val=y_test_cat,
+        batch_size=128,
+        epochs=5
+    )
+    
+    # Evaluate
+    y_pred_prob = model.model.predict(X_test_reshaped)
+    y_pred = np.argmax(y_pred_prob, axis=1)
+    
+    # Create scikit-learn compatible predictor
+    class MLPPredictor:
+        def predict(self, X):
+            X_reshaped = X.reshape(-1, 28, 28, 1)
+            y_pred_prob = model.model.predict(X_reshaped)
+            return np.argmax(y_pred_prob, axis=1)
+    
+    return evaluate_model(MLPPredictor(), X_test, y_test, "MLP")
 
 def compare_models(results):
     """Compare accuracies of different models."""
@@ -150,7 +252,7 @@ def compare_models(results):
     # Plot comparison
     plt.figure(figsize=(10, 6))
     plt.bar(models, accuracies)
-    plt.ylim(0, 1.0)
+    plt.ylim(0.9, 1.0)  # Adjust y-axis for better visualization
     plt.ylabel('Accuracy')
     plt.title('Model Accuracy Comparison')
     plt.savefig('doc/fig/model_comparison.png')
@@ -174,6 +276,14 @@ def main():
     results["SVM"] = train_svm(X_train, y_train, X_test, y_test)
     results["RandomForest"] = train_random_forest(X_train, y_train, X_test, y_test)
     results["KNN"] = train_knn(X_train, y_train, X_test, y_test)
+    
+    # Deep learning models
+    results["CNN"] = train_cnn(X_train, y_train, X_test, y_test)
+    results["MLP"] = train_mlp(X_train, y_train, X_test, y_test)
+    
+    # Always train the transformer model on CPU
+    print("Training transformer model on CPU...")
+    results["Transformer"] = train_transformer(X_train, y_train, X_test, y_test)
     
     # Compare models
     compare_models(results)

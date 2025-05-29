@@ -1,77 +1,105 @@
 # MNIST Pattern Recognition
 
-A comprehensive exploration of various machine learning approaches for MNIST digit recognition.
+This project implements various machine learning approaches for handwritten digit recognition using the MNIST dataset. It provides a comprehensive comparison of different algorithms including traditional machine learning and deep learning techniques.
 
-## Table of Contents
+## Features
 
-- [Overview](#overview)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Models](#models)
-- [Documentation](#documentation)
-- [License](#license)
+- Multiple model implementations:
+  - Support Vector Machine (SVM)
+  - Random Forest
+  - K-Nearest Neighbors (KNN)
+  - Vision Transformer (ViT)
+- Comprehensive model evaluation
+- Performance visualization (confusion matrices, sample predictions)
+- Modular code structure
 
-## Overview
+## Project Structure
 
-This project implements and compares multiple machine learning algorithms for the MNIST handwritten digit recognition task. It includes CNN, MLP, SVM, Random Forest, and KNN approaches with consistent evaluation metrics and visualization capabilities.
+```
+mnist_nn/
+├── doc/               # Documentation and results
+│   ├── fig/           # Generated figures
+│   └── out/           # Model metrics and outputs
+├── src/               # Source code
+│   ├── modules/       # Core modules
+│   │   ├── models/    # Model implementations
+│   │   └── ...        # Other modules
+│   └── ...            # Entry points and utilities
+└── tests/             # Unit tests
+```
 
 ## Installation
 
-```console
-hatch build
-pip install dist/mnist-nn-<version>-py3-none-any.whl
-```
+1. Clone the repository:
+   ```
+   git clone https://github.com/cheesychocolate/mnist_nn.git
+   cd mnist_nn
+   ```
 
-Or for development:
+2. Create and activate a virtual environment:
+   ```
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
 
-```console
-git clone https://github.com/CheesyChocolate/mnist-nn.git
-cd mnist-nn
-pip install -e .
-```
+3. Install the package and dependencies:
+   ```
+   pip install -e .
+   ```
 
 ## Usage
 
-Run a specific model:
+To generate results for all models:
 
-```console
-python -m src.main --model cnn --epochs 10
+```
+python src/generate_samples.py
 ```
 
-Available models:
-- `cnn`: Convolutional Neural Network
-- `mlp`: Multi-layer Perceptron
-- `svm`: Support Vector Machine
-- `rf`: Random Forest
-- `knn`: K-Nearest Neighbors
-- `all`: Run all models and compare results
-
-Additional options:
-- `--epochs`: Number of epochs for neural network training (default: 10)
-- `--batch-size`: Batch size for training (default: 128)
-- `--no-reshape`: Do not reshape data for CNN (default: False)
-- `--sample-size`: Sample size for training (default: None - use all data)
+This will:
+1. Load and preprocess the MNIST dataset
+2. Train all models
+3. Generate evaluation metrics
+4. Create visualizations in `doc/fig/`
+5. Save metrics in `doc/out/`
 
 ## Models
 
-The project includes the following models:
+### Support Vector Machine (SVM)
 
-1. **CNN (Convolutional Neural Network)**: A deep learning approach with convolutional layers optimized for image recognition.
-2. **MLP (Multi-layer Perceptron)**: A standard neural network with fully connected layers.
-3. **SVM (Support Vector Machine)**: A traditional machine learning approach for classification.
-4. **Random Forest**: An ensemble method based on decision trees.
-5. **KNN (K-Nearest Neighbors)**: A simple instance-based learning method.
+The SVM model uses an RBF kernel to capture non-linear relationships in the data. It is effective for image classification tasks but can be computationally expensive for large datasets.
 
-## Documentation
+### Random Forest
 
-The results of model training and evaluation are saved in:
-- `doc/fig/`: Visualizations including confusion matrices, training histories, and sample predictions
-- `doc/out/`: Metrics and model performance comparisons
+The Random Forest model uses an ensemble of decision trees to improve accuracy and reduce overfitting. It provides good interpretability through feature importance measures.
 
-A detailed report and presentation are available in LaTeX format:
-- `doc/report.tex`: Academic article describing the methodology and results
-- `doc/presentation.tex`: Presentation slides summarizing the project
+### K-Nearest Neighbors (KNN)
+
+The KNN model is a simple yet effective approach that classifies digits based on the majority class of their nearest neighbors. It requires no training time but needs to store the entire training set.
+
+### Vision Transformer (ViT)
+
+The Vision Transformer model treats image classification as a sequence modeling task by splitting the image into patches and applying transformer-based self-attention mechanisms. This approach leverages the power of attention to capture global relationships in the image.
+
+## Results
+
+The models are evaluated using standard metrics:
+- Accuracy
+- Precision, Recall, F1-score
+- Confusion matrices
+- Sample predictions
+
+Results are generated in `doc/fig/` and `doc/out/` directories.
 
 ## License
 
-`mnist-nn` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Requirements
+
+- Python 3.8+
+- NumPy
+- SciPy
+- Matplotlib
+- scikit-learn
+- PyTorch (for transformer model)
+- pandas

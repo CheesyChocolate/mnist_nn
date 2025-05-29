@@ -1,5 +1,5 @@
 Model: RandomForest
-Accuracy: 0.9270
+Accuracy: 0.9300
 
 Classification Report:
   Class 0:
@@ -8,57 +8,57 @@ Classification Report:
     f1-score: 0.9841
     support: 94.0000
   Class 1:
-    precision: 1.0000
+    precision: 0.9910
     recall: 0.9735
-    f1-score: 0.9865
+    f1-score: 0.9821
     support: 113.0000
   Class 2:
-    precision: 0.9182
-    recall: 0.9182
-    f1-score: 0.9182
+    precision: 0.9189
+    recall: 0.9273
+    f1-score: 0.9231
     support: 110.0000
   Class 3:
-    precision: 0.8889
-    recall: 0.8889
-    f1-score: 0.8889
+    precision: 0.8992
+    recall: 0.9145
+    f1-score: 0.9068
     support: 117.0000
   Class 4:
-    precision: 0.9070
-    recall: 0.9176
-    f1-score: 0.9123
+    precision: 0.8953
+    recall: 0.9059
+    f1-score: 0.9006
     support: 85.0000
   Class 5:
-    precision: 0.9223
+    precision: 0.9406
     recall: 0.9223
-    f1-score: 0.9223
+    f1-score: 0.9314
     support: 103.0000
   Class 6:
-    precision: 0.9362
+    precision: 0.9565
     recall: 0.9565
-    f1-score: 0.9462
+    f1-score: 0.9565
     support: 92.0000
   Class 7:
-    precision: 0.9271
-    recall: 0.9175
-    f1-score: 0.9223
+    precision: 0.9362
+    recall: 0.9072
+    f1-score: 0.9215
     support: 97.0000
   Class 8:
-    precision: 0.8942
+    precision: 0.9029
     recall: 0.9029
-    f1-score: 0.8986
+    f1-score: 0.9029
     support: 103.0000
   Class 9:
-    precision: 0.8941
-    recall: 0.8837
-    f1-score: 0.8889
+    precision: 0.8750
+    recall: 0.8953
+    f1-score: 0.8851
     support: 86.0000
   Class macro avg:
-    precision: 0.9267
-    recall: 0.9271
-    f1-score: 0.9268
+    precision: 0.9295
+    recall: 0.9295
+    f1-score: 0.9294
     support: 1000.0000
   Class weighted avg:
-    precision: 0.9272
-    recall: 0.9270
-    f1-score: 0.9270
+    precision: 0.9303
+    recall: 0.9300
+    f1-score: 0.9301
     support: 1000.0000

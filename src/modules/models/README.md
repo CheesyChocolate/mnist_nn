@@ -1,22 +1,50 @@
-# MNIST Model Implementations
+# Model Implementations
 
-This directory contains different model implementations for MNIST digit recognition:
+This directory contains implementations of various machine learning models for the MNIST digit recognition task.
 
-## Model Implementations
+## Available Models
 
-- **cnn_model.py**: Convolutional Neural Network model implementation
-- **mlp_model.py**: Multi-layer Perceptron (fully connected neural network) implementation
-- **svm_model.py**: Support Vector Machine classifier implementation
-- **random_forest_model.py**: Random Forest classifier implementation
-- **knn_model.py**: K-Nearest Neighbors classifier implementation
+### Traditional Machine Learning Models
 
-## Common Interface
+- **SVM (Support Vector Machine)**: `svm_model.py`
+  - Uses an RBF kernel to capture non-linear relationships
+  - Strong for high-dimensional data
+  - Scikit-learn implementation
 
-Each model implements a common interface with the following methods:
+- **Random Forest**: `random_forest_model.py`
+  - Ensemble of decision trees
+  - Good balance of accuracy and interpretability
+  - Provides feature importance information
 
-- `__init__()`: Constructor with model-specific parameters
-- `train(x_train, y_train, x_val=None, y_val=None, ...)`: Training method with consistent parameters
-- `predict(x)`: Prediction method
-- `predict_proba(x)`: Probability estimates (when applicable)
+- **KNN (K-Nearest Neighbors)**: `knn_model.py`
+  - Instance-based learning approach
+  - No training phase required
+  - Simple but effective for this task
 
-This modular structure allows for easy comparison between different models and makes it simple to add new model implementations in the future. 
+### Deep Learning Models
+
+- **CNN (Convolutional Neural Network)**: `cnn_model.py`
+  - Specialized for image data
+  - Captures spatial hierarchies in images
+  - Highly effective for digit recognition
+
+- **MLP (Multi-layer Perceptron)**: `mlp_model.py`
+  - Standard feedforward neural network
+  - Fully connected layers
+  - Simple baseline deep learning approach
+
+- **Vision Transformer (ViT)**: `transformer_model.py`
+  - Treats images as sequences of patches
+  - Applies self-attention mechanisms
+  - Captures global relationships in images
+  - Based on the transformer architecture
+
+## Model Structure
+
+Each model is implemented with a similar interface for consistency, including:
+
+- Initialization with configurable hyperparameters
+- `fit(X, y)` method for training
+- `predict(X)` method for making predictions
+
+This allows for easy comparison between different approaches. 

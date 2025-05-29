@@ -1,6 +1,9 @@
 Model Accuracy Comparison
 ========================
 
-SVM: 0.9480
-RandomForest: 0.9270
+SVM: 0.9540
+RandomForest: 0.9300
 KNN: 0.9280
+CNN: 0.9600
+MLP: 0.8950
+Transformer: 0.8950

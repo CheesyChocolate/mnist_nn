@@ -8,57 +8,57 @@ Classification Report:
     f1-score: 0.9735
     support: 94.0000
   Class 1:
-    precision: 0.9339
+    precision: 0.9417
     recall: 1.0000
-    f1-score: 0.9658
+    f1-score: 0.9700
     support: 113.0000
   Class 2:
-    precision: 0.9800
-    recall: 0.8909
-    f1-score: 0.9333
+    precision: 0.9604
+    recall: 0.8818
+    f1-score: 0.9194
     support: 110.0000
   Class 3:
-    precision: 0.8720
+    precision: 0.8934
     recall: 0.9316
-    f1-score: 0.9008
+    f1-score: 0.9121
     support: 117.0000
   Class 4:
-    precision: 0.9186
-    recall: 0.9294
-    f1-score: 0.9240
+    precision: 0.9157
+    recall: 0.8941
+    f1-score: 0.9048
     support: 85.0000
   Class 5:
-    precision: 0.9223
-    recall: 0.9223
-    f1-score: 0.9223
+    precision: 0.9159
+    recall: 0.9515
+    f1-score: 0.9333
     support: 103.0000
   Class 6:
-    precision: 0.9278
+    precision: 0.9091
     recall: 0.9783
-    f1-score: 0.9524
+    f1-score: 0.9424
     support: 92.0000
   Class 7:
-    precision: 0.8879
+    precision: 0.9223
     recall: 0.9794
-    f1-score: 0.9314
+    f1-score: 0.9500
     support: 97.0000
   Class 8:
-    precision: 0.9878
-    recall: 0.7864
-    f1-score: 0.8757
+    precision: 0.9753
+    recall: 0.7670
+    f1-score: 0.8587
     support: 103.0000
   Class 9:
-    precision: 0.9048
-    recall: 0.8837
-    f1-score: 0.8941
+    precision: 0.8876
+    recall: 0.9186
+    f1-score: 0.9029
     support: 86.0000
   Class macro avg:
-    precision: 0.9303
+    precision: 0.9290
     recall: 0.9281
-    f1-score: 0.9273
+    f1-score: 0.9267
     support: 1000.0000
   Class weighted avg:
-    precision: 0.9305
+    precision: 0.9297
     recall: 0.9280
-    f1-score: 0.9273
+    f1-score: 0.9270
     support: 1000.0000

@@ -1,0 +1,64 @@
+Model: MLP
+Accuracy: 0.8950
+
+Classification Report:
+  Class 0:
+    precision: 0.9208
+    recall: 0.9894
+    f1-score: 0.9538
+    support: 94.0000
+  Class 1:
+    precision: 0.9823
+    recall: 0.9823
+    f1-score: 0.9823
+    support: 113.0000
+  Class 2:
+    precision: 0.9528
+    recall: 0.9182
+    f1-score: 0.9352
+    support: 110.0000
+  Class 3:
+    precision: 0.9423
+    recall: 0.8376
+    f1-score: 0.8869
+    support: 117.0000
+  Class 4:
+    precision: 0.8750
+    recall: 0.9059
+    f1-score: 0.8902
+    support: 85.0000
+  Class 5:
+    precision: 0.8981
+    recall: 0.9417
+    f1-score: 0.9194
+    support: 103.0000
+  Class 6:
+    precision: 0.8654
+    recall: 0.9783
+    f1-score: 0.9184
+    support: 92.0000
+  Class 7:
+    precision: 0.7068
+    recall: 0.9691
+    f1-score: 0.8174
+    support: 97.0000
+  Class 8:
+    precision: 0.9100
+    recall: 0.8835
+    f1-score: 0.8966
+    support: 103.0000
+  Class 9:
+    precision: 1.0000
+    recall: 0.5000
+    f1-score: 0.6667
+    support: 86.0000
+  Class macro avg:
+    precision: 0.9054
+    recall: 0.8906
+    f1-score: 0.8867
+    support: 1000.0000
+  Class weighted avg:
+    precision: 0.9074
+    recall: 0.8950
+    f1-score: 0.8911
+    support: 1000.0000
