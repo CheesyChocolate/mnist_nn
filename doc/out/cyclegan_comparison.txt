@@ -1,5 +1,0 @@
-Model Accuracy Comparison with Limited Labeled Data
-===============================================
-
-CNN (Limited Data): 0.8600
-CycleGAN: 0.7925

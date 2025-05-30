@@ -248,18 +248,9 @@ def train_cyclegan(
     batch_size=32,
 ):
     """Train and evaluate a CycleGAN-based model with limited labeled data."""
-    print("Training CycleGAN-based model with limited labeled data...")
-    print("\nApproach explanation:")
-    print("1. The CycleGAN discriminator learns to extract useful features from images")
-    print("   without requiring labels, using adversarial training.")
-    print("2. These learned features are then repurposed for classification by adding")
-    print(
-        "   a classification head on top of the discriminator's feature extraction layers."
-    )
-    print("3. This approach can be valuable when labeled data is scarce but unlabeled")
-    print("   data is abundant.\n")
+    print("Training CycleGAN model...")
 
-    # Reshape data for CycleGAN input
+    # Reshape data for CNN input
     X_labeled_reshaped = X_labeled.reshape(-1, 28, 28, 1)
     X_unlabeled_reshaped = X_unlabeled.reshape(-1, 28, 28, 1)
     X_test_reshaped = X_test.reshape(-1, 28, 28, 1)
@@ -283,19 +274,6 @@ def train_cyclegan(
     y_pred = model.predict(X_test_reshaped)
     accuracy = np.mean(y_pred == y_test)
     print(f"CycleGAN accuracy: {accuracy:.4f}")
-
-    # Save visualization for comparison
-    plt.figure(figsize=(10, 6))
-    plt.bar(
-        ["CNN (Limited Data)", "CycleGAN"],
-        [train_cnn_limited_data(X_labeled, y_labeled, X_test, y_test), accuracy],
-    )
-    plt.ylim(0.7, 1.0)
-    plt.ylabel("Accuracy")
-    plt.title("Limited Data Model Comparison")
-    plt.savefig("doc/fig/cyclegan_comparison.png")
-    plt.close()
-
     return accuracy
 
 
@@ -303,9 +281,7 @@ def train_cnn_limited_data(
     X_labeled, y_labeled, X_test, y_test, epochs=20, batch_size=32
 ):
     """Train a regular CNN model with only limited labeled data for comparison."""
-    print(
-        "Training standard CNN model with only limited labeled data (for comparison)..."
-    )
+    print("Training CNN model with limited data...")
 
     # Reshape data for CNN input
     X_labeled_reshaped = X_labeled.reshape(-1, 28, 28, 1)
@@ -468,18 +444,7 @@ def main():
     else:
         # Limited data mode
         if args.model in ["cyclegan", "all"]:
-            # Train both CNN with limited data and CycleGAN for comparison
-            cnn_limited_acc = train_cnn_limited_data(
-                X_labeled,
-                y_labeled,
-                X_test,
-                y_test,
-                epochs=args.epochs,
-                batch_size=args.batch_size,
-            )
-            results["CNN (Limited Data)"] = cnn_limited_acc
-
-            cyclegan_acc = train_cyclegan(
+            results["CycleGAN"] = train_cyclegan(
                 X_labeled,
                 y_labeled,
                 X_unlabeled,
@@ -489,14 +454,6 @@ def main():
                 classifier_epochs=args.classifier_epochs,
                 batch_size=args.batch_size,
             )
-            results["CycleGAN"] = cyclegan_acc
-
-            # Save comparison to file
-            with open("doc/out/cyclegan_comparison.txt", "w") as f:
-                f.write("Model Accuracy Comparison with Limited Labeled Data\n")
-                f.write("===============================================\n\n")
-                f.write(f"CNN (Limited Data): {cnn_limited_acc:.4f}\n")
-                f.write(f"CycleGAN: {cyclegan_acc:.4f}\n")
         else:
             print("Limited data mode is only supported for CycleGAN model")
             print("Use --model cyclegan with --limited-data flag")
