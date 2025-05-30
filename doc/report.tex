@@ -24,7 +24,7 @@ This paper presents a comprehensive comparison of multiple machine learning appr
 \end{abstract}
 
 \section{Introduction}
-Handwritten digit recognition represents a fundamental pattern recognition problem in computer vision and machine learning. The MNIST dataset \cite{lecun1998mnist}, consisting of 60,000 training images and 10,000 test images of handwritten digits (0-9), has become a standard benchmark for evaluating classification algorithms. Despite its apparent simplicity, the task involves significant challenges including variations in writing styles, stroke thickness, and digit positioning.
+Handwritten digit recognition represents a fundamental pattern recognition problem in computer vision and machine learning. The MNIST dataset \cite{lecun1998gradient}, consisting of 60,000 training images and 10,000 test images of handwritten digits (0-9), has become a standard benchmark for evaluating classification algorithms. Despite its apparent simplicity, the task involves significant challenges including variations in writing styles, stroke thickness, and digit positioning.
 
 This study compares seven distinct machine learning approaches to solve the MNIST classification problem. By implementing these models using a consistent methodology and evaluation framework, we aim to provide a clear understanding of their relative strengths, weaknesses, and appropriate use cases. Furthermore, we explore the challenging scenario of limited labeled data, employing a CycleGAN-based approach for semi-supervised learning.
 
@@ -36,7 +36,7 @@ This study compares seven distinct machine learning approaches to solve the MNIS
 \end{figure}
 
 \section{Related Work}
-The MNIST dataset has been extensively studied since its introduction by LeCun et al. \cite{lecun1998mnist}. Early approaches to the problem utilized techniques such as linear classifiers, k-nearest neighbors, and support vector machines, achieving accuracies in the range of 84\% to 98\% \cite{lecun1998gradient}.
+The MNIST dataset has been extensively studied since its introduction by LeCun et al. \cite{lecun1998gradient}. Early approaches to the problem utilized techniques such as linear classifiers, k-nearest neighbors, and support vector machines, achieving accuracies in the range of 84\% to 98\% \cite{lecun1998gradient}.
 
 With the advent of deep learning, convolutional neural networks (CNNs) have demonstrated superior performance on this task. LeNet-5, one of the earliest CNN architectures, achieved an error rate of approximately 0.8\% \cite{lecun1998gradient}. More recent architectures have further reduced the error rate, with some sophisticated models reaching error rates below 0.2\% \cite{ciregan2012multi}.
 
@@ -75,6 +75,15 @@ The CycleGAN model implements a semi-supervised learning approach for scenarios 
     \item A classification head added to the discriminator to leverage learned features for digit recognition
 \end{itemize}
 This architecture enables the model to learn useful representations from unlabeled data through adversarial training, which are then fine-tuned for classification using a small amount of labeled examples. We train the model with only 500 labeled examples (compared to the typical 60,000), demonstrating the effectiveness of this approach when labeled data is scarce but unlabeled data is abundant.
+
+\subsubsection{Diffusion Model (Semi-Supervised Learning)}
+The Diffusion model implements another approach to semi-supervised learning with limited labeled data. It is based on the denoising diffusion probabilistic model (DDPM) framework and consists of:
+\begin{itemize}
+    \item A U-Net style denoiser network that learns to reverse the diffusion process
+    \item Time step and class conditioning to guide the generation process
+    \item A classifier that leverages the learned representations
+\end{itemize}
+The diffusion model follows a multi-step training process: first training a classifier on limited labeled data to generate pseudo-labels for unlabeled examples, then training the diffusion model on the combined dataset, and finally generating additional synthetic examples to augment the training data for the final classifier. This approach demonstrates how generative models can effectively leverage unlabeled data and data augmentation for classification tasks when labeled data is scarce.
 
 \subsubsection{Vision Transformer (ViT)}
 The Vision Transformer model divides input images into fixed-size patches, linearly embeds each patch, adds position embeddings, and feeds the resulting sequence of vectors to a standard Transformer encoder. The model uses a patch size of 7×7 pixels, resulting in 16 patches per image. The Transformer has 4 layers, 4 attention heads, and an embedding dimension of 64. A classification token is appended to the sequence to capture the global image representation for final classification. This CPU-optimized implementation allows the Transformer to be used without specialized hardware.
@@ -165,6 +174,26 @@ Figure \ref{fig:cyclegan_results} shows the results of our semi-supervised learn
     \label{fig:cyclegan_samples}
 \end{figure}
 
+\subsection{Diffusion Model Results}
+Figure \ref{fig:diffusion_training} shows the training process of our diffusion model, including the denoising loss and classifier training performance. The model was trained with only 500 labeled examples but achieved an impressive 81.3\% accuracy on the test set.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.49\textwidth]{fig/diffusion_training_loss.png}
+    \includegraphics[width=0.49\textwidth]{fig/diffusion_classifier_training.png}
+    \caption{Diffusion model training: Denoising loss (left) and classifier performance (right)}
+    \label{fig:diffusion_training}
+\end{figure}
+
+Figure \ref{fig:diffusion_samples} shows examples of synthetic digits generated by the trained diffusion model. These generated samples were used to augment the limited labeled dataset during training, demonstrating the model's ability to generate realistic handwritten digits.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/diffusion_final_samples.png}
+    \caption{Synthetic handwritten digits generated by the diffusion model}
+    \label{fig:diffusion_samples}
+\end{figure}
+
 \section{Discussion}
 \subsection{Comparison of Approaches}
 Each of the seven models has distinct characteristics that make them suitable for different scenarios:
@@ -196,6 +225,23 @@ Key strengths of this approach include:
 
 However, the model requires more complex training (separate GAN training and classifier fine-tuning phases) and is computationally more intensive than standard supervised approaches. This model is particularly valuable in real-world scenarios where obtaining labeled data is expensive or time-consuming, but unlabeled data is readily available.
 
+\subsubsection{Diffusion Model (Semi-Supervised Learning)}
+The Diffusion model achieved impressive results in our semi-supervised learning scenario, with an accuracy of 81.3\% when trained with only 500 labeled examples. It employs a conditional denoising diffusion approach with:
+\begin{itemize}
+    \item A U-Net style denoiser network that gradually removes noise
+    \item Time step and class conditioning to guide the generation process
+    \item Data augmentation through synthetic example generation
+\end{itemize}
+
+Key strengths of this approach include:
+\begin{itemize}
+    \item Ability to generate high-quality synthetic examples for under-represented classes
+    \item Effective use of pseudo-labeling for unlabeled data
+    \item Superior performance compared to traditional supervised learning with limited data
+\end{itemize}
+
+The diffusion model outperformed the CycleGAN approach in our experiments, demonstrating the effectiveness of recent advances in generative modeling for semi-supervised learning tasks.
+
 \subsubsection{Vision Transformer}
 The Vision Transformer model also achieved an accuracy of 89.50\%. This model was specifically optimized to run efficiently on CPU hardware, demonstrating that transformer architectures can be adapted for environments without specialized GPU hardware. Despite the simplifications made for CPU compatibility (reduced layers, heads, and embedding dimensions), the transformer model achieved performance equivalent to the MLP. The attention mechanism allows the model to focus on relevant parts of the image, but the lack of inductive biases that CNNs inherently have (such as translation invariance) may require more data for optimal performance on image tasks.
 
@@ -204,13 +250,13 @@ Beyond accuracy, several practical considerations influence the choice of model 
 
 \begin{itemize}
     \item \textbf{Training time:} Neural networks (CNN, MLP) typically require longer training times but can process multiple samples in parallel. The Vision Transformer is more computationally intensive than other models but was optimized to run efficiently on CPU. Traditional models like Random Forest and SVM also require significant training phases, with larger datasets increasing training time. KNN has no training phase but higher inference costs.
-    
+
     \item \textbf{Memory usage:} KNN requires storing the entire training set, making it memory-intensive for large datasets. Neural networks store their parameters, which can be large for complex models but do not scale with the size of the training data. The Transformer model has a moderate memory footprint with our CPU optimizations.
-    
+
     \item \textbf{Hardware requirements:} The CNN model benefits significantly from GPU acceleration. Our Vision Transformer implementation demonstrates that even transformer models, which typically require GPUs, can be adapted to run on CPU-only environments with appropriate optimizations.
-    
+
     \item \textbf{Interpretability:} Random Forest offers better interpretability through feature importance measures compared to SVM and neural networks. Neural networks, especially deep ones, are often considered "black boxes" with limited interpretability. The Vision Transformer's attention maps can provide some interpretability by showing which image patches the model focuses on for classification.
-    
+
     \item \textbf{Scalability:} Neural networks scale well with large datasets when proper hardware (GPUs) is available. SVM and KNN do not scale as well to very large datasets compared to Random Forest, which can be trained in parallel.
 \end{itemize}
 
@@ -236,15 +282,15 @@ Future directions for this research include:
     \item Scaling up the Vision Transformer with more data and exploring hybrid CNN-Transformer architectures
     \item Expanding semi-supervised learning with other generative models like VAEs and diffusion models
     \item Exploring different ratios of labeled to unlabeled data to determine optimal semi-supervised learning conditions
+    \item Comparing different diffusion model architectures and noise schedules for classification tasks
+    \item Exploring classifier-free guidance techniques in diffusion models for improved conditional generation
+    \item Investigating cascaded diffusion models for higher-resolution image generation and classification
     \item Optimizing models for other hardware platforms like mobile devices
     \item Application to more complex datasets beyond MNIST
 \end{itemize}
 
 \bibliographystyle{plain}
 \begin{thebibliography}{9}
-\bibitem{lecun1998mnist}
-LeCun, Y., Bottou, L., Bengio, Y., \& Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.
-
 \bibitem{lecun1998gradient}
 LeCun, Y., Bottou, L., Bengio, Y., \& Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.
 

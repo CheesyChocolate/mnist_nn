@@ -11,6 +11,7 @@ This project implements various machine learning approaches for handwritten digi
   - Convolutional Neural Network (CNN)
   - Multi-Layer Perceptron (MLP)
   - CycleGAN (for semi-supervised learning)
+  - Diffusion Model (for semi-supervised learning)
   - Vision Transformer (ViT)
 - Support for limited labeled data scenarios (semi-supervised learning)
 - Comprehensive model evaluation
@@ -92,6 +93,9 @@ python src/main.py --model mlp --epochs 15 --batch-size 128 --sample-size 5000
 # Run CycleGAN model with limited labeled data
 python src/main.py --model cyclegan --gan-epochs 50 --classifier-epochs 10 --batch-size 32
 
+# Run Diffusion model with limited labeled data
+python src/main.py --model diffusion --diffusion-epochs 20 --classifier-epochs 10 --batch-size 32
+
 # Run Transformer model with custom settings
 python src/main.py --model transformer --epochs 5 --batch-size 32 --sample-size 5000
 ```
@@ -121,6 +125,15 @@ The MLP model is a fully-connected neural network that learns to classify digits
 ### CycleGAN with Limited Data
 
 The CycleGAN approach demonstrates semi-supervised learning when labeled data is scarce. It utilizes a CycleGAN architecture to learn meaningful representations from unlabeled data, which are then leveraged for classification with a small amount of labeled examples.
+
+### Diffusion Model
+
+The Diffusion Model is a semi-supervised learning approach that leverages the power of diffusion processes to learn meaningful representations from unlabeled data. It employs a conditional denoising diffusion probabilistic model (DDPM) that learns to gradually denoise corrupted images, conditioned on class labels. The approach has two key components:
+
+1. A U-Net style denoiser network that learns to reverse the diffusion process
+2. A classifier that utilizes the learned representations for digit classification
+
+The diffusion model excels in limited labeled data scenarios by using pseudo-labels for unlabeled data and generating synthetic training examples to augment the labeled dataset. This approach demonstrates how generative models can be effectively applied to classification tasks when labeled data is scarce.
 
 ### Vision Transformer (ViT)
 

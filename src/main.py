@@ -20,6 +20,7 @@ from src.modules.models.transformer_model import MNISTTransformerModel
 from src.modules.models.cnn_model import CNNModel
 from src.modules.models.mlp_model import MLPModel
 from src.modules.models.cyclegan_model import CycleGANModel
+from src.modules.models.diffusion_model import DiffusionModel
 
 # Ensure output directories exist
 os.makedirs("doc/fig", exist_ok=True)
@@ -29,7 +30,7 @@ os.makedirs("doc/out", exist_ok=True)
 RANDOM_STATE = 42
 TEST_SIZE = 0.2
 SAMPLE_SIZE = 5000  # Default sample size
-LIMITED_DATA_SIZE = 500  # Small number of labeled examples for CycleGAN mode
+LIMITED_DATA_SIZE = 500  # Small number of labeled examples for CycleGAN/Diffusion mode
 
 
 def load_data(sample_size=SAMPLE_SIZE, limited_data=False):
@@ -277,6 +278,46 @@ def train_cyclegan(
     return accuracy
 
 
+def train_diffusion(
+    X_labeled,
+    y_labeled,
+    X_unlabeled,
+    X_test,
+    y_test,
+    diffusion_epochs=20,
+    classifier_epochs=10,
+    batch_size=32,
+):
+    """Train and evaluate a diffusion-based model with limited labeled data."""
+    print("Training Diffusion model...")
+
+    # Reshape data for diffusion model input
+    X_labeled_reshaped = X_labeled.reshape(-1, 28, 28, 1)
+    X_unlabeled_reshaped = X_unlabeled.reshape(-1, 28, 28, 1)
+    X_test_reshaped = X_test.reshape(-1, 28, 28, 1)
+
+    # Initialize the model with smaller diffusion steps for faster training
+    model = DiffusionModel(input_shape=(28, 28, 1), num_classes=10, diffusion_steps=100)
+
+    # Train the model with limited labeled data and additional unlabeled data
+    model.train_with_limited_data(
+        X_labeled_reshaped,
+        y_labeled,
+        X_unlabeled_reshaped,
+        X_test_reshaped,
+        y_test,
+        diffusion_epochs=diffusion_epochs,
+        classifier_epochs=classifier_epochs,
+        batch_size=batch_size,
+    )
+
+    # Evaluate
+    y_pred = model.predict(X_test_reshaped)
+    accuracy = np.mean(y_pred == y_test)
+    print(f"Diffusion model accuracy: {accuracy:.4f}")
+    return accuracy
+
+
 def train_cnn_limited_data(
     X_labeled, y_labeled, X_test, y_test, epochs=20, batch_size=32
 ):
@@ -318,7 +359,7 @@ def main():
         "--model",
         type=str,
         default="all",
-        choices=["svm", "rf", "knn", "transformer", "cnn", "mlp", "cyclegan", "all"],
+        choices=["svm", "rf", "knn", "transformer", "cnn", "mlp", "cyclegan", "diffusion", "all"],
         help="Model to train (default: all)",
     )
     parser.add_argument(
@@ -373,15 +414,21 @@ def main():
         help="Number of epochs for classifier fine-tuning (default: 10)",
     )
     parser.add_argument(
+        "--diffusion-epochs",
+        type=int,
+        default=20,
+        help="Number of epochs for diffusion model training (default: 20)",
+    )
+    parser.add_argument(
         "--limited-data",
         action="store_true",
-        help="Use limited labeled data mode for training (required for cyclegan)",
+        help="Use limited labeled data mode for training (required for cyclegan and diffusion)",
     )
 
     args = parser.parse_args()
 
-    # Force limited data mode if cyclegan model is selected
-    if args.model == "cyclegan":
+    # Force limited data mode if cyclegan or diffusion model is selected
+    if args.model in ["cyclegan", "diffusion"]:
         args.limited_data = True
 
     # Load data based on mode (limited or full)
@@ -442,7 +489,7 @@ def main():
                 batch_size=args.batch_size,
             )
     else:
-        # Limited data mode
+        # Limited data mode - semi-supervised learning models
         if args.model in ["cyclegan", "all"]:
             results["CycleGAN"] = train_cyclegan(
                 X_labeled,
@@ -454,9 +501,21 @@ def main():
                 classifier_epochs=args.classifier_epochs,
                 batch_size=args.batch_size,
             )
-        else:
-            print("Limited data mode is only supported for CycleGAN model")
-            print("Use --model cyclegan with --limited-data flag")
+            
+        if args.model in ["diffusion", "all"]:
+            results["Diffusion"] = train_diffusion(
+                X_labeled,
+                y_labeled,
+                X_unlabeled,
+                X_test,
+                y_test,
+                diffusion_epochs=args.diffusion_epochs,
+                classifier_epochs=args.classifier_epochs,
+                batch_size=args.batch_size,
+            )
+        elif args.model not in ["cyclegan", "diffusion", "all"]:
+            print("Limited data mode is only supported for CycleGAN and Diffusion models")
+            print("Use --model cyclegan or --model diffusion with --limited-data flag")
 
     # Print comparison if multiple models were trained
     if len(results) > 1:
