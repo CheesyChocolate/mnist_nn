@@ -20,13 +20,13 @@
 \maketitle
 
 \begin{abstract}
-This paper presents a comprehensive comparison of multiple machine learning approaches for handwritten digit recognition using the MNIST dataset. We implement and evaluate six different models: Support Vector Machine (SVM), Random Forest, K-Nearest Neighbors (KNN), Convolutional Neural Network (CNN), Multi-Layer Perceptron (MLP), and Vision Transformer (ViT). Each model is evaluated using standardized metrics, and their strengths and weaknesses are analyzed in the context of pattern recognition. Our findings provide insights into the effectiveness of different algorithmic approaches for this classic computer vision task.
+This paper presents a comprehensive comparison of multiple machine learning approaches for handwritten digit recognition using the MNIST dataset. We implement and evaluate seven different models: Support Vector Machine (SVM), Random Forest, K-Nearest Neighbors (KNN), Convolutional Neural Network (CNN), Multi-Layer Perceptron (MLP), CycleGAN, and Vision Transformer (ViT). Each model is evaluated using standardized metrics, and their strengths and weaknesses are analyzed in the context of pattern recognition. Additionally, we explore semi-supervised learning using CycleGAN in scenarios with limited labeled data. Our findings provide insights into the effectiveness of different algorithmic approaches for this classic computer vision task, under both fully supervised and semi-supervised conditions.
 \end{abstract}
 
 \section{Introduction}
 Handwritten digit recognition represents a fundamental pattern recognition problem in computer vision and machine learning. The MNIST dataset \cite{lecun1998mnist}, consisting of 60,000 training images and 10,000 test images of handwritten digits (0-9), has become a standard benchmark for evaluating classification algorithms. Despite its apparent simplicity, the task involves significant challenges including variations in writing styles, stroke thickness, and digit positioning.
 
-This study compares six distinct machine learning approaches to solve the MNIST classification problem. By implementing these models using a consistent methodology and evaluation framework, we aim to provide a clear understanding of their relative strengths, weaknesses, and appropriate use cases.
+This study compares seven distinct machine learning approaches to solve the MNIST classification problem. By implementing these models using a consistent methodology and evaluation framework, we aim to provide a clear understanding of their relative strengths, weaknesses, and appropriate use cases. Furthermore, we explore the challenging scenario of limited labeled data, employing a CycleGAN-based approach for semi-supervised learning.
 
 \begin{figure}[ht]
     \centering
@@ -50,7 +50,7 @@ Despite the superior performance of deep learning approaches, traditional machin
 The MNIST dataset consists of 28$\times$28 pixel grayscale images of handwritten digits. The dataset is divided into 60,000 training images and 10,000 test images. Each pixel in the images has an intensity value ranging from 0 to 255, which we normalize to the range [0,1]. For our experiments, we used a randomly selected subset of 5,000 images to reduce computational requirements, with 80\% for training and 20\% for testing.
 
 \subsection{Models}
-We implement and evaluate six different models:
+We implement and evaluate seven different models:
 
 \subsubsection{Support Vector Machine (SVM)}
 We utilize an SVM with an RBF kernel, which can capture non-linear relationships in the data. The hyperparameters C (regularization parameter) and gamma (kernel coefficient) are set to 10.0 and 'scale' respectively to optimize classification performance.
@@ -67,6 +67,15 @@ The CNN model consists of two convolutional layers (32 and 64 filters respective
 \subsubsection{Multi-Layer Perceptron (MLP)}
 The MLP model is a fully connected neural network with two hidden layers of 512 and 256 neurons, respectively, with ReLU activations and dropout regularization. The network concludes with a softmax output layer. This architecture learns to recognize patterns in the flattened image data.
 
+\subsubsection{CycleGAN (Semi-Supervised Learning)}
+The CycleGAN model implements a semi-supervised learning approach for scenarios with limited labeled data. It consists of:
+\begin{itemize}
+    \item Generators that learn to translate between image domains
+    \item Discriminators that learn to distinguish real from generated images
+    \item A classification head added to the discriminator to leverage learned features for digit recognition
+\end{itemize}
+This architecture enables the model to learn useful representations from unlabeled data through adversarial training, which are then fine-tuned for classification using a small amount of labeled examples. We train the model with only 500 labeled examples (compared to the typical 60,000), demonstrating the effectiveness of this approach when labeled data is scarce but unlabeled data is abundant.
+
 \subsubsection{Vision Transformer (ViT)}
 The Vision Transformer model divides input images into fixed-size patches, linearly embeds each patch, adds position embeddings, and feeds the resulting sequence of vectors to a standard Transformer encoder. The model uses a patch size of 7×7 pixels, resulting in 16 patches per image. The Transformer has 4 layers, 4 attention heads, and an embedding dimension of 64. A classification token is appended to the sequence to capture the global image representation for final classification. This CPU-optimized implementation allows the Transformer to be used without specialized hardware.
 
@@ -82,28 +91,36 @@ We evaluate each model using the following metrics:
 
 \section{Results}
 \subsection{Model Performance}
-The performance comparison of the six models is shown in Figure \ref{fig:model_comparison}. The CNN model achieved the highest accuracy at 96.00\%, followed by SVM at 95.40\%, Random Forest at 93.00\%, KNN at 92.80\%, and both MLP and Transformer at 89.50\%. While the differences in accuracy are relatively small, they can be significant when applied to large-scale real-world applications.
+The performance comparison of the seven models is shown in Figure \ref{fig:model_comparison}. The CNN model achieved the highest accuracy at 96.00\%, followed by SVM at 95.40\%, Random Forest at 93.00\%, KNN at 92.80\%, and both MLP and Transformer at 89.50\%. While the differences in accuracy are relatively small, they can be significant when applied to large-scale real-world applications.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\textwidth]{fig/model_comparison.png}
-    \caption{Accuracy comparison of the six models}
+    \caption{Accuracy comparison of the seven models}
     \label{fig:model_comparison}
 \end{figure}
 
 Each model demonstrates different strengths in classifying specific digits. The confusion matrices provide insights into the specific classification patterns and error types for each model.
 
 \subsection{Confusion Matrices}
-The confusion matrices provide insights into the specific patterns of misclassifications for each model. Figure \ref{fig:confusion_matrices} shows the confusion matrices for all traditional models and the transformer model.
+The confusion matrices provide insights into the specific patterns of misclassifications for each model. Figure \ref{fig:confusion_matrices_traditional} shows the confusion matrices for traditional models, while Figure \ref{fig:confusion_matrices_neural} shows the confusion matrices for neural network models.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.49\textwidth]{fig/SVM_confusion_matrix.png}
     \includegraphics[width=0.49\textwidth]{fig/RandomForest_confusion_matrix.png}
     \includegraphics[width=0.49\textwidth]{fig/KNN_confusion_matrix.png}
+    \caption{Confusion matrices for traditional models: SVM (top left), Random Forest (top right), and KNN (bottom)}
+    \label{fig:confusion_matrices_traditional}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.49\textwidth]{fig/CNN_confusion_matrix.png}
+    \includegraphics[width=0.49\textwidth]{fig/MLP_confusion_matrix.png}
     \includegraphics[width=0.49\textwidth]{fig/Transformer_confusion_matrix.png}
-    \caption{Confusion matrices for SVM (top left), Random Forest (top right), KNN (bottom left), and Transformer (bottom right)}
-    \label{fig:confusion_matrices}
+    \caption{Confusion matrices for neural network models: CNN (top left), MLP (top right), and Transformer (bottom)}
+    \label{fig:confusion_matrices_neural}
 \end{figure}
 
 Common patterns of misclassification across all models include:
@@ -114,18 +131,43 @@ Common patterns of misclassification across all models include:
 \end{itemize}
 
 \subsection{Sample Predictions}
-Figure \ref{fig:sample_predictions} shows sample predictions from the SVM model on test data. These examples illustrate both correct classifications and typical errors.
+Figures \ref{fig:sample_predictions_traditional} and \ref{fig:sample_predictions_neural} show sample predictions from different models on test data. These examples illustrate both correct classifications and typical errors.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.95\textwidth]{fig/SVM_sample_predictions.png}
     \caption{Sample predictions from the SVM model}
-    \label{fig:sample_predictions}
+    \label{fig:sample_predictions_traditional}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/CNN_sample_predictions.png}
+    \caption{Sample predictions from the CNN model}
+    \label{fig:sample_predictions_neural}
+\end{figure}
+
+\subsection{CycleGAN Results}
+Figure \ref{fig:cyclegan_results} shows the results of our semi-supervised learning approach using CycleGAN. The model was trained with only 500 labeled examples, demonstrating the effectiveness of leveraging unlabeled data through adversarial training.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.49\textwidth]{fig/cyclegan_discriminator_loss.png}
+    \includegraphics[width=0.49\textwidth]{fig/cyclegan_classifier_training.png}
+    \caption{CycleGAN training: Discriminator loss (left) and classifier accuracy (right)}
+    \label{fig:cyclegan_results}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/CycleGAN_sample_predictions.png}
+    \caption{Sample predictions from the CycleGAN model with limited labeled data}
+    \label{fig:cyclegan_samples}
 \end{figure}
 
 \section{Discussion}
 \subsection{Comparison of Approaches}
-Each of the six models has distinct characteristics that make them suitable for different scenarios:
+Each of the seven models has distinct characteristics that make them suitable for different scenarios:
 
 \subsubsection{Convolutional Neural Network}
 The CNN model achieved the highest overall accuracy at 96.00\%. CNNs are particularly well-suited for image classification tasks due to their ability to learn hierarchical patterns through convolutional layers. The model's architecture allows it to automatically extract relevant features from the raw pixel data, capturing spatial relationships that are critical for digit recognition. However, CNNs require more training data and computational resources compared to traditional methods.
@@ -141,6 +183,18 @@ The KNN model with k=3 neighbors achieved competitive results. KNN is easy to im
 
 \subsubsection{Multi-Layer Perceptron}
 The MLP model achieved an accuracy of 89.50\%. While not as effective as CNNs for image data, MLPs offer a good balance between performance and computational requirements. The fully connected architecture can learn complex patterns, though it lacks the spatial awareness of CNNs. MLPs are easier to train than CNNs and can be effective when the input features have no inherent spatial relationship.
+
+\subsubsection{CycleGAN (Semi-Supervised Learning)}
+The CycleGAN-based model demonstrates an innovative approach to handling limited labeled data scenarios. When trained with only 500 labeled examples, it achieved competitive accuracy compared to standard models trained on the same limited dataset. The model leverages the discriminator's ability to learn meaningful representations from unlabeled data through adversarial training, which are then repurposed for classification.
+
+Key strengths of this approach include:
+\begin{itemize}
+    \item Effective utilization of unlabeled data, which is often more abundant than labeled data
+    \item Ability to extract useful features without explicit supervision
+    \item Potential for domain adaptation across different types of digit representations
+\end{itemize}
+
+However, the model requires more complex training (separate GAN training and classifier fine-tuning phases) and is computationally more intensive than standard supervised approaches. This model is particularly valuable in real-world scenarios where obtaining labeled data is expensive or time-consuming, but unlabeled data is readily available.
 
 \subsubsection{Vision Transformer}
 The Vision Transformer model also achieved an accuracy of 89.50\%. This model was specifically optimized to run efficiently on CPU hardware, demonstrating that transformer architectures can be adapted for environments without specialized GPU hardware. Despite the simplifications made for CPU compatibility (reduced layers, heads, and embedding dimensions), the transformer model achieved performance equivalent to the MLP. The attention mechanism allows the model to focus on relevant parts of the image, but the lack of inductive biases that CNNs inherently have (such as translation invariance) may require more data for optimal performance on image tasks.
@@ -161,9 +215,11 @@ Beyond accuracy, several practical considerations influence the choice of model 
 \end{itemize}
 
 \section{Conclusion}
-This study has demonstrated that both traditional machine learning and deep learning approaches can achieve high accuracy on the MNIST handwritten digit recognition task. The CNN model achieved the best performance at 96.00\%, followed by SVM at 95.40\%, Random Forest at 93.00\%, KNN at 92.80\%, and both MLP and Vision Transformer at 89.50\%. Each model offers different trade-offs in terms of accuracy, training time, memory requirements, and interpretability.
+This study has demonstrated that both traditional machine learning and deep learning approaches can achieve high accuracy on the MNIST handwritten digit recognition task. The CNN model achieved the best performance at 96.00\%, followed by SVM at 95.40\%, Random Forest at 93.00\%, KNN at 92.80\%, and both MLP and Vision Transformer at 89.50\%. Additionally, we explored semi-supervised learning with CycleGAN for scenarios with limited labeled data. Each model offers different trade-offs in terms of accuracy, training time, memory requirements, and interpretability.
 
 The superior performance of the CNN model confirms that convolutional architectures are particularly well-suited for image classification tasks, capturing spatial relationships that are difficult for other models to detect. However, the SVM model performed remarkably well, suggesting that traditional machine learning approaches remain competitive for this task, especially when computational resources are limited or interpretability is important.
+
+Our semi-supervised learning experiment with the CycleGAN model demonstrates an effective approach for scenarios with limited labeled data. By leveraging the power of generative adversarial networks to learn from unlabeled data, we can achieve reasonable performance even when labeled examples are scarce. This approach is particularly relevant for real-world applications where obtaining labeled data is expensive or time-consuming.
 
 Our CPU-optimized Vision Transformer implementation demonstrates that modern deep learning architectures can be adapted to run in environments without specialized hardware, albeit with some performance trade-offs. The equivalent performance of the Transformer and MLP suggests that for small datasets like MNIST, the benefit of self-attention might not fully manifest without larger training sets or more complex images.
 
@@ -178,6 +234,8 @@ Future directions for this research include:
     \item Comparison with other approaches such as recurrent neural networks
     \item Investigation of ensemble methods combining multiple model types
     \item Scaling up the Vision Transformer with more data and exploring hybrid CNN-Transformer architectures
+    \item Expanding semi-supervised learning with other generative models like VAEs and diffusion models
+    \item Exploring different ratios of labeled to unlabeled data to determine optimal semi-supervised learning conditions
     \item Optimizing models for other hardware platforms like mobile devices
     \item Application to more complex datasets beyond MNIST
 \end{itemize}

@@ -43,9 +43,10 @@
     \item Compare and contrast different algorithms:
     \begin{itemize}
         \item Traditional ML: SVM, Random Forest, KNN
-        \item Deep Learning: CNN, MLP, Vision Transformer
+        \item Deep Learning: CNN, MLP, CycleGAN, Vision Transformer
     \end{itemize}
     \item Analyze performance metrics across methods
+    \item Explore semi-supervised learning for limited labeled data scenarios
     \item Identify strengths and weaknesses of each approach
 \end{itemize}
 
@@ -127,6 +128,32 @@
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Semi-Supervised Learning with CycleGAN}
+
+\begin{itemize}
+\item \textbf{CycleGAN for Limited Labeled Data}
+    \begin{itemize}
+        \item Adversarial architecture with generators and discriminators
+        \item Leverages unlabeled data through feature learning
+        \item Adds classification head to discriminator for digit recognition
+    \end{itemize}
+\item \textbf{Semi-Supervised Approach}
+    \begin{itemize}
+        \item Uses only 500 labeled examples (vs. 60,000 in full dataset)
+        \item Two-phase training: GAN training + classifier fine-tuning
+        \item Demonstrates effective learning when labels are scarce
+    \end{itemize}
+\item \textbf{Real-World Applications}
+    \begin{itemize}
+        \item Medical imaging with limited annotated examples
+        \item Industrial inspection with few labeled defects
+        \item Document analysis with sparse labeled samples
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
 \section{Results}
 
 \begin{frame}
@@ -141,7 +168,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Confusion Matrices}
+\frametitle{Confusion Matrices - Traditional Models}
 
 \begin{figure}
     \centering
@@ -153,7 +180,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{More Confusion Matrices}
+\frametitle{More Confusion Matrices - Traditional and Transformer}
 
 \begin{figure}
     \centering
@@ -165,12 +192,58 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Sample Predictions}
+\frametitle{Confusion Matrices - Neural Networks}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{fig/CNN_confusion_matrix.png}
+    \includegraphics[width=0.45\textwidth]{fig/MLP_confusion_matrix.png}
+    \caption{CNN (left) and MLP (right) confusion matrices}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Sample Predictions - Traditional Models}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.95\textwidth]{fig/SVM_sample_predictions.png}
     \caption{Sample predictions from SVM model}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Sample Predictions - Neural Networks}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/CNN_sample_predictions.png}
+    \caption{Sample predictions from CNN model}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{CycleGAN Training and Results}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{fig/cyclegan_discriminator_loss.png}
+    \includegraphics[width=0.45\textwidth]{fig/cyclegan_classifier_training.png}
+    \caption{CycleGAN training: Discriminator loss (left) and classifier accuracy (right)}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{CycleGAN Sample Predictions}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/CycleGAN_sample_predictions.png}
+    \caption{Sample predictions from CycleGAN model with limited labeled data}
 \end{figure}
 
 \end{frame}
@@ -186,6 +259,7 @@
     \item Random Forest achieves 93.00\%
     \item KNN performs at 92.80\%
     \item MLP and Transformer both at 89.50\%
+    \item CycleGAN demonstrates effective semi-supervised learning with limited labeled data
     \item Trade-offs between accuracy, speed, and interpretability
     \begin{itemize}
         \item CNN: Best accuracy but requires more computational resources
@@ -193,6 +267,7 @@
         \item Random Forest: Good interpretability
         \item KNN: Simple baseline but memory-intensive
         \item MLP: Decent performance with simpler architecture than CNN
+        \item CycleGAN: Effective when labeled data is scarce
         \item Transformer: Competitive performance on CPU without specialized hardware
     \end{itemize}
 \end{itemize}
